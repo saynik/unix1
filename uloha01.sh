@@ -8,10 +8,10 @@ fi
 
 
 if [ "$1" == "--typ" ] && [ -e "$2" ]; then
-echo "$(file -L "$2")" && exit 0
+echo "$(file -b "$2")" && exit 0
 fi
 
 
 if [ "$1" == "--typ" ] && [ ! -e "$2" ]; then
-echo "Neexistující cesta!" && exit 1
+echo "Chyba" && exit 1
 fi
