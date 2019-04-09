@@ -2,7 +2,13 @@
 
 #set -x
 
-array=($*)
+array=( $@ )
+
+while read i; do
+    data+=(${i})
+done
+
+array+=( ${data[@]} )
 
 view_func () {
     for i in "${@}"; do
@@ -40,7 +46,7 @@ part_func () {
     view_func "${data[@]:$start:$part}"
 }
 
-echo "${array[1]:1}"
+#echo "${array[1]:1}"
 
 if [ "${1::1}" != "-" ]; then
     view_func ${array[@]}
