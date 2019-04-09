@@ -1,6 +1,12 @@
-#/bin/bash 
+#!/bin/bash 
 
-array=($*)
+array=( $* )
+
+while read i; do
+    data+=( ${i} )
+done
+
+array+=( ${data[@]} )
 
 revers_array () {
     array_revers=("${@}")
@@ -30,3 +36,4 @@ elif [ "${1::1}""n" == "-n" ]; then
     count=$2
     n_revers_array $count
 fi
+
