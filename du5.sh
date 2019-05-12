@@ -2,6 +2,9 @@
 
 source="https://blackhole.sk/~kabel/unix/index.html"
 
-obj=$( curl $source )
+curl $source > html_page.txt
 
-echo "$obj" | grep -o '<a .*href=.*>' | sed -e 's/<a /\n<a /g' | sed -e 's/<a .*href=['"'"'"]//' -e 's/["'"'"'].*$//' -e '/^$/ d' 
+awk 'NR>1{x[$1]++
+}END{
+for(i in x)print i}
+' RS="<a[ \n]*href[ \n]*=[ \n]*\"" FS="\"" IGNORECASE=1 ./html_page.txt
