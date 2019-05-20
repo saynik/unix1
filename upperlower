@@ -1,0 +1,19 @@
+#!/bin/bash
+
+upperlower () {
+    action=${1:-"upper"}
+    raction=${1:+"upper"}
+    all_files=( $( find ./ -type f -name "[[:${action}:]\+]*[[:${action}:]0-9\s]" ) )
+    for obj in ${all_files[@]} ; do
+        if [ -f `dirname $obj`/$( echo `basename $obj` | tr "[:$action:]" "[:${raction:-"lower"}:]") ] ; then
+            echo "Error: collision on $obj" ; exit 1
+        fi
+        mv "$obj" `dirname $obj`/$( echo `basename $obj` | tr "[:$action:]" "[:${raction:-"lower"}:]" )
+    done
+}
+
+if [ "$1" == '-r' ] ; then 
+    upperlower 'lower'
+else
+    upperlower
+fi
