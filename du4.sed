@@ -2,28 +2,21 @@
 
 read var
 all=${var}
-output=${var}
 
-cheeker () {
-    if echo $all | grep -o "[0-9]* [\+] [0-9]*" > /dev/null ; then
-        number=( $( echo $all | grep -o "[0-9]* [\+] [0-9]*" ) )
-        count="$(( ${#number[@]} / 3 ))"
-        for i in $( seq 0 $(( $count - 1 )) ); do
-              shift_var=$(( $i * 3  ))
-              cal ${number[@]:$shift_var:3}
-        done
-        echo "$output"
-    else
-        echo "${all[@]}"
-    fi 
+numbers=( $( echo ${all[@]} | sed 's/\+/ \+ /g' | sed 's/[^0-9*\+0-9*]/ /g' ) )
+
+sum_f () {
+    obj=( ${@} )
+    summing=$(( $1 + $2 ))
+#    var=$( echo ${var} | sed "s/[$1]\s*[\+]\s*[$2]/$summing/g" )
+    var=$( echo ${var} | sed "s/$1.*[\+]*.$2/$summing/g" )
 }
 
-cal () {
-    obj=( $@ )
-    result=$(( obj[0] ${obj[1]} obj[2] ))
-    replace=${obj[@]}
-    output=$( echo $output | sed "s/$replace/$result/" )
-}
+for i in ${!numbers[@]} ; do
+    
+    if [ "${numbers[$i]}" == '+' ] ; then
+        sum_f ${numbers[$(($i - 1 ))]} ${numbers[$(( $i + 1 ))]} 
+    fi     
+done
 
-cheeker
- 
+echo $var
